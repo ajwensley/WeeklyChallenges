@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TextTwist {
@@ -12,53 +11,47 @@ public class TextTwist {
         System.out.println(score(input3, "tossed"));
     }
 
-    public static int score(String[] inputs, String base) {
-        HashMap<Character, Integer> baseMap = getMap(base);
+    public static int score(String[] inputs, String baseWord) {
+        HashMap<Character, Integer> baseWordCharCountMapForCheckingIfTheInputIsUsingALetterTooManyTimes = getCharCountMap(baseWord);
         int score = 0;
         for (String input : inputs) {
-            if (!checkValid(input, baseMap)) continue;
-            if (input.length() == 6) score += 50;
+            if (!isValid(input, baseWordCharCountMapForCheckingIfTheInputIsUsingALetterTooManyTimes)) continue;
+
             score += input.length() - 2;
+            if (input.length() == 6) score += 50;
         }
         return score;
     }
 
-    public static HashMap<Character, Integer> getMap(String base) {
-        HashMap<Character, Integer> output = new HashMap<Character, Integer>();
+    public static HashMap<Character, Integer> getCharCountMap(String input) {
+        HashMap<Character, Integer> output = new HashMap<>();
 
-        for (int i = 0; i < base.length(); i++) {
-            if (output.containsKey(base.charAt(i))) {
-                output.replace(base.charAt(i), output.get(base.charAt(i)) + 1);
+        for (Character currentChar : input.toCharArray()) {
+            if (!output.containsKey(currentChar)) {
+                output.put(currentChar, 1);
             } else {
-                output.put(base.charAt(i), 1);
+                output.replace(currentChar, output.get(currentChar) + 1);
             }
         }
 
         return output;
     }
 
-    public static boolean checkValid(String input, HashMap<Character, Integer> baseInput) {
-        HashMap<Character, Integer> base = deepCopyHashMap(baseInput);
-        for (int i = 0; i < input.length(); i++) {
-            if (base.containsKey(input.charAt(i))) {
-                if (base.get(input.charAt(i)) > 0) {
-                    base.replace(input.charAt(i), base.get(input.charAt(i)) - 1);
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+    public static boolean isValid(String input, HashMap<Character, Integer> baseWordInput) {
+        HashMap<Character, Integer> baseWordCharCount = deepCopyHashMap(baseWordInput);
+
+        for (Character currentChar : input.toCharArray()) {
+            if (baseWordCharCount.containsKey(currentChar)) {
+                baseWordCharCount.replace(currentChar, baseWordCharCount.get(currentChar) - 1);
+                if (baseWordCharCount.get(currentChar) == 0) baseWordCharCount.remove(currentChar);
+            } else {return false;}
         }
         return true;
     }
 
-    public static HashMap<Character, Integer> deepCopyHashMap(HashMap<Character, Integer> input) {
-
-        HashMap<Character, Integer> output = new HashMap<Character, Integer>();
-        for (Character key : input.keySet()) {
-            output.put(key, input.get(key));
-        }
+    public static <A, B> HashMap<A, B> deepCopyHashMap(HashMap<A, B> input) {
+        HashMap<A, B> output = new HashMap<>();
+        for (A key : input.keySet()) output.put(key, input.get(key));
         return output;
     }
 }
