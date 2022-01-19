@@ -1,33 +1,12 @@
 //isAdd = true for Additive Persistence, false for Multiplicative Persistence
-function getPersistence(input, isAdd) {
-    let iterations = 0;
-    while (input >= 10) console.log('----iteration ' + ++iterations + ', inputting = ' + input + ', returning ' + (input = String(input).split('').reduce((a, b) => isAdd ? parseInt(a) + parseInt(b) : parseInt(a) * parseInt(b))));
-    return iterations;
-}
+function getPersistence(input, isAdd) {return (input < 10) ? 0 : 1 + getPersistence(String(input).split('').reduce((a, b) => isAdd ? parseInt(a) + parseInt(b) : parseInt(a) * parseInt(b)), isAdd)};
 
 
-console.log('Additive persistence of 0 = ' + getPersistence(0, true));
-console.log('Multiplicative persistence of 0 = ' + getPersistence(0, false));
-console.log('Additive persistence of 1 = ' + getPersistence(1, true));
-console.log('Multiplicative persistence of 1 = ' + getPersistence(1, false));
-console.log('Additive persistence of 123456789 = ' + getPersistence(123456789, true));
-console.log('Multiplicative persistence of 123456789 = ' + getPersistence(123456789, false));
+console.log('Additive persistence of 1679583 = ' + getPersistence(1679583, true));
+console.log('Additive persistence of 123456 = ' + getPersistence(123456, true));
+console.log('Additive persistence of 6 = ' + getPersistence(6, true));
 
-
-
-
-//deprecated
-// function combineDigits(input, isAdd) {
-//     let output = isAdd ? 0 : 1;
-//     while (input > 0) {
-//         output = isAdd ? output + (input % 10) : output * (input % 10);
-//         input = Math.floor(input / 10);
-//         console.error('input = ' + input + ', output = ' + output);
-//     }
-//     return output;
-// }
-
-// function combineDigitsStrings(input, isAdd) {
-//     output = String(input).split('').reduce((a, b) => isAdd ? parseInt(a) + parseInt(b) : parseInt(a) * parseInt(b));
-//     return output;
-// }
+console.log('-----');
+console.log('Multiplicative persistence of 77 = ' + getPersistence(77, false));
+console.log('Multiplicative persistence of 123456 = ' + getPersistence(123456, false));
+console.log('Additive persistence of 4 = ' + getPersistence(4, true));
